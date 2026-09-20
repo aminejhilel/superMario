@@ -6,6 +6,7 @@ export interface InputState {
   jump: boolean;
   run: boolean;
   attack: boolean;
+  superAttack: boolean;
   pause: boolean;
 }
 
@@ -56,8 +57,9 @@ export class InputManager {
     const jump = !!(this.keys[' '] || this.keys['space'] || this.keys['w'] || this.keys['arrowup'] || this.touchState.jump);
     const run = !!(this.keys['shift'] || this.keys['shiftleft'] || this.keys['shiftright'] || this.touchState.run);
     const attack = !!(this.keys['x'] || this.keys['j'] || this.touchState.attack);
+    const superAttack = !!(this.keys['z'] || this.keys['k'] || this.touchState.superAttack);
     const pause = !!(this.keys['escape'] || this.touchState.pause);
 
-    return { left, right, up, down, jump, run, attack, pause };
+    return { left, right, up, down, jump, run, attack, superAttack, pause };
   }
 }

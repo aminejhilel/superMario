@@ -8,15 +8,21 @@ export class Projectile implements BoundingBox {
   public vx: number;
   public vy: number;
   public isPlayerProjectile: boolean;
+  public isSuperBeam: boolean;
   public active: boolean = true;
-  public lifetime: number = 2.5; // Seconds
+  public lifetime: number = 2.5;
 
-  constructor(x: number, y: number, vx: number, vy: number, isPlayer: boolean) {
+  constructor(x: number, y: number, vx: number, vy: number, isPlayer: boolean, isSuperBeam: boolean = false) {
     this.x = x;
     this.y = y;
     this.vx = vx;
     this.vy = vy;
     this.isPlayerProjectile = isPlayer;
+    this.isSuperBeam = isSuperBeam;
+    if (isSuperBeam) {
+      this.width = 36;
+      this.height = 36;
+    }
   }
 
   public update(dt: number) {
@@ -33,7 +39,22 @@ export class Projectile implements BoundingBox {
     ctx.save();
     ctx.translate(this.x - cameraX + this.width / 2, this.y - cameraY + this.height / 2);
 
-    if (this.isPlayerProjectile) {
+    if (this.isSuperBeam) {
+      // Mega Super Beam Blast
+      ctx.fillStyle = '#00ffff';
+      ctx.beginPath();
+      ctx.arc(0, 0, 18, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.fillStyle = '#ffffff';
+      ctx.beginPath();
+      ctx.arc(0, 0, 10, 0, Math.PI * 2);
+      ctx.fill();
+
+      ctx.strokeStyle = '#a855f7';
+      ctx.lineWidth = 3;
+      ctx.stroke();
+    } else if (this.isPlayerProjectile) {
       ctx.fillStyle = '#00ffff';
       ctx.beginPath();
       ctx.arc(0, 0, 6, 0, Math.PI * 2);

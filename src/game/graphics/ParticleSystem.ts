@@ -8,6 +8,7 @@ export interface Particle {
   alpha: number;
   decay: number;
   gravity?: number;
+  text?: string;
 }
 
 export class ParticleSystem {
@@ -42,8 +43,14 @@ export class ParticleSystem {
     ctx.save();
     for (const p of this.particles) {
       ctx.globalAlpha = Math.max(0, p.alpha);
-      ctx.fillStyle = p.color;
-      ctx.fillRect(p.x - cameraX, p.y - cameraY, p.size, p.size);
+      if (p.text) {
+        ctx.fillStyle = p.color;
+        ctx.font = '12px var(--font-pixel), sans-serif';
+        ctx.fillText(p.text, p.x - cameraX, p.y - cameraY);
+      } else {
+        ctx.fillStyle = p.color;
+        ctx.fillRect(p.x - cameraX, p.y - cameraY, p.size, p.size);
+      }
     }
     ctx.restore();
   }
@@ -119,6 +126,20 @@ export class ParticleSystem {
       color: '#00ffff',
       alpha: 0.9,
       decay: 0.06,
+    });
+  }
+
+  public addComboTextParticle(x: number, y: number, text: string, color: string = '#ffe600') {
+    this.particles.push({
+      x,
+      y,
+      vx: 0,
+      vy: -1.2,
+      size: 14,
+      color,
+      alpha: 1,
+      decay: 0.02,
+      text,
     });
   }
 }

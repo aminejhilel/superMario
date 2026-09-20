@@ -15,6 +15,7 @@ export enum PlayerState {
   JUMP = 'JUMP',
   FALL = 'FALL',
   ATTACK = 'ATTACK',
+  SUPER_ATTACK = 'SUPER_ATTACK',
   HURT = 'HURT',
   DEAD = 'DEAD',
 }
@@ -39,6 +40,7 @@ export enum PowerUpType {
   SPEED_BOOST = 'SPEED_BOOST',
   DOUBLE_JUMP = 'DOUBLE_JUMP',
   HEALTH = 'HEALTH',
+  MAGNET = 'MAGNET',
 }
 
 export enum PlatformType {
@@ -75,7 +77,7 @@ export interface LevelConfig {
   theme: 'green_valley' | 'crystal_cave' | 'sky_islands' | 'volcanic_land' | 'drako_castle';
   width: number;
   height: number;
-  timeLimit: number; // in seconds
+  timeLimit: number;
   spawnPoint: Vector2D;
   finishPortal: BoundingBox;
   platforms: PlatformData[];
@@ -125,8 +127,11 @@ export interface PlayerStats {
   stars: number;
   score: number;
   shieldActive: boolean;
+  magnetTimer: number;
   speedBoostTimer: number;
   infiniteJumpTimer: number;
+  comboMultiplier: number;
+  superMeter: number;
 }
 
 export interface GameSaveData {

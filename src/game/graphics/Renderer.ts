@@ -68,7 +68,8 @@ export class Renderer {
         player.facingRight,
         player.animFrame,
         player.state,
-        player.shieldActive
+        player.shieldActive,
+        player.magnetTimer
       );
     }
 

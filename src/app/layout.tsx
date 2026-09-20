@@ -2,8 +2,8 @@ import type { Metadata } from 'next';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'Pixel Quest - 2D Platformer Game',
-  description: 'A complete, action-packed 2D side-scrolling platformer featuring Neo on a quest through 5 worlds to defeat Drako!',
+  title: 'AMINE JHILEL - 2D Platformer Game',
+  description: 'An action-packed 2D side-scrolling platformer starring Neo on an epic quest through 5 worlds to defeat Drako!',
 };
 
 export default function RootLayout({

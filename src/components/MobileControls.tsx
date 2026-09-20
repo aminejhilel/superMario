@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { ArrowLeft, ArrowRight, ArrowUp, Zap, ZapOff } from 'lucide-react';
+import { ArrowLeft, ArrowRight, ArrowUp, Zap, Sparkles } from 'lucide-react';
 import { InputManager } from '@/game/systems/InputManager';
 
 interface MobileControlsProps {
@@ -42,15 +42,26 @@ export const MobileControls: React.FC<MobileControlsProps> = () => {
         </button>
       </div>
 
-      {/* Action Buttons (Attack, Run, Jump) */}
+      {/* Action Buttons (Attack, Super Beam, Jump) */}
       <div className="pointer-events-auto flex items-center gap-3">
-        {/* Attack Button */}
+        {/* Super Beam Attack Button */}
+        <button
+          onTouchStart={() => handleTouchStart('z')}
+          onTouchEnd={() => handleTouchEnd('z')}
+          onMouseDown={() => handleTouchStart('z')}
+          onMouseUp={() => handleTouchEnd('z')}
+          className="w-14 h-14 rounded-2xl bg-slate-900/80 border-2 border-purple-500/60 active:bg-purple-500/40 flex items-center justify-center text-purple-400 font-pixel text-xs shadow-xl backdrop-blur-md"
+        >
+          <Sparkles className="w-6 h-6" />
+        </button>
+
+        {/* Regular Attack Button */}
         <button
           onTouchStart={() => handleTouchStart('x')}
           onTouchEnd={() => handleTouchEnd('x')}
           onMouseDown={() => handleTouchStart('x')}
           onMouseUp={() => handleTouchEnd('x')}
-          className="w-14 h-14 rounded-2xl bg-slate-900/80 border-2 border-amber-500/50 active:bg-amber-500/40 flex items-center justify-center text-amber-400 font-pixel text-xs shadow-xl backdrop-blur-md"
+          className="w-14 h-14 rounded-2xl bg-slate-900/80 border-2 border-amber-500/60 active:bg-amber-500/40 flex items-center justify-center text-amber-400 font-pixel text-xs shadow-xl backdrop-blur-md"
         >
           <Zap className="w-6 h-6" />
         </button>

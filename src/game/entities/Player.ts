@@ -26,10 +26,16 @@ export class Player implements BoundingBox {
   public jumpsRemaining: number = 2;
   private jumpKeyPressed: boolean = false;
 
-  // Powerups
+  // Powerups & Enhancements
   public shieldActive: boolean = false;
+  public magnetTimer: number = 0;
   public speedBoostTimer: number = 0;
   public infiniteJumpTimer: number = 0;
+
+  // Combo & Super Meter System
+  public comboMultiplier: number = 1;
+  public comboTimer: number = 0;
+  public superMeter: number = 0; // 0 to 100
 
   // Checkpoint respawn position
   public respawnPoint: Vector2D;
@@ -40,15 +46,25 @@ export class Player implements BoundingBox {
     this.respawnPoint = { x: startX, y: startY };
   }
 
-  public update(dt: number, input: InputState, particles: ParticleSystem): { shootProjectile: boolean } {
+  public update(dt: number, input: InputState, particles: ParticleSystem): { shootProjectile: boolean; shootSuperBeam: boolean } {
     this.animFrame += dt * 60;
     let shoot = false;
+    let shootSuper = false;
 
     // Powerup Timers
     if (this.speedBoostTimer > 0) this.speedBoostTimer -= dt;
+    if (this.magnetTimer > 0) this.magnetTimer -= dt;
     if (this.infiniteJumpTimer > 0) {
       this.infiniteJumpTimer -= dt;
       this.jumpsRemaining = 2;
+    }
+
+    // Combo multiplier decay
+    if (this.comboTimer > 0) {
+      this.comboTimer -= dt;
+      if (this.comboTimer <= 0) {
+        this.comboMultiplier = 1;
+      }
     }
 
     // Hurt Cooldown
@@ -72,7 +88,7 @@ export class Player implements BoundingBox {
       this.vx = speed;
       this.facingRight = true;
     } else {
-      this.vx *= 0.75; // Friction
+      this.vx *= 0.75;
     }
 
     // Jump & Double Jump Logic
@@ -98,12 +114,22 @@ export class Player implements BoundingBox {
     this.vy += 0.48;
     if (this.vy > 14) this.vy = 14;
 
-    // Attack (Energy Blast)
+    // Regular Energy Attack (Key X)
     if (input.attack && this.attackTimer <= 0) {
-      this.attackTimer = 0.25; // Cooldown
+      this.attackTimer = 0.22;
       shoot = true;
       AudioManager.playSFX('laser');
       particles.addEnergyTrail(this.facingRight ? this.x + this.width + 5 : this.x - 5, this.y + 12);
+    }
+
+    // Super Beam Attack (Key Z / Super Meter Full)
+    if (input.superAttack && this.superMeter >= 100 && this.attackTimer <= 0) {
+      this.superMeter = 0;
+      this.attackTimer = 0.5;
+      shootSuper = true;
+      AudioManager.playSFX('boss_roar');
+      particles.triggerScreenShake(0.3, 10);
+      particles.addExplosion(this.x + this.width / 2, this.y + this.height / 2, '#00ffff', 25);
     }
 
     // Position updates
@@ -113,6 +139,8 @@ export class Player implements BoundingBox {
     // Determine state
     if (this.isHurt) {
       this.state = PlayerState.HURT;
+    } else if (shootSuper) {
+      this.state = PlayerState.SUPER_ATTACK;
     } else if (this.attackTimer > 0.1) {
       this.state = PlayerState.ATTACK;
     } else if (!this.grounded) {
@@ -123,12 +151,26 @@ export class Player implements BoundingBox {
       this.state = PlayerState.IDLE;
     }
 
-    // Reset grounded flag for next frame physics check
     if (this.grounded) {
-      this.jumpsRemaining = this.infiniteJumpTimer > 0 ? 2 : 2;
+      this.jumpsRemaining = 2;
     }
 
-    return { shootProjectile: shoot };
+    return { shootProjectile: shoot, shootSuperBeam: shootSuper };
+  }
+
+  public registerEnemyKill(particles?: ParticleSystem) {
+    this.comboMultiplier = Math.min(5, this.comboMultiplier + 1);
+    this.comboTimer = 3.5; // 3.5 seconds to chain next kill
+    this.superMeter = Math.min(100, this.superMeter + 25);
+
+    if (particles) {
+      particles.addComboTextParticle(
+        this.x,
+        this.y - 15,
+        `${this.comboMultiplier}x COMBO!`,
+        this.comboMultiplier >= 4 ? '#ff0055' : '#ffe600'
+      );
+    }
   }
 
   public takeDamage(amount: number = 1, particles?: ParticleSystem): boolean {
@@ -144,9 +186,10 @@ export class Player implements BoundingBox {
     }
 
     this.hp = Math.max(0, this.hp - amount);
+    this.comboMultiplier = 1;
     this.isHurt = true;
     this.hurtTimer = 1.5;
-    this.vy = -6; // Knockback jump
+    this.vy = -6;
     AudioManager.playSFX('damage');
 
     if (particles) {
@@ -165,5 +208,6 @@ export class Player implements BoundingBox {
     this.hp = this.maxHp;
     this.isHurt = false;
     this.hurtTimer = 0;
+    this.comboMultiplier = 1;
   }
 }

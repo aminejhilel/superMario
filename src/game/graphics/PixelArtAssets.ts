@@ -9,7 +9,8 @@ export class PixelArtAssets {
     facingRight: boolean,
     animFrame: number,
     state: string,
-    shieldActive: boolean = false
+    shieldActive: boolean = false,
+    magnetTimer: number = 0
   ) {
     ctx.save();
     ctx.translate(x + width / 2, y + height / 2);
@@ -20,30 +21,38 @@ export class PixelArtAssets {
     const pX = -width / 2;
     const pY = -height / 2;
 
-    // Body suit (Neon Cyan / Blue adventurer suit)
-    ctx.fillStyle = '#00d2ff';
+    // Magnet Magnetic Ring Effect
+    if (magnetTimer > 0) {
+      ctx.strokeStyle = '#ff00ff';
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.arc(0, 0, width * 1.1 + Math.sin(animFrame * 0.3) * 4, 0, Math.PI * 2);
+      ctx.stroke();
+    }
+
+    // Body suit (Neon Cyan / Gold adventurer suit)
+    ctx.fillStyle = '#00ffff';
     ctx.fillRect(pX + 8, pY + 12, 16, 14);
 
-    // Head / Helmet (Bright Yellow / Gold helmet with visor)
-    ctx.fillStyle = '#ffcc00';
+    // Head / Helmet (Bright Gold helmet with visor)
+    ctx.fillStyle = '#ffe600';
     ctx.fillRect(pX + 8, pY + 2, 16, 12);
 
-    // Visor (Glowing Cyan)
-    ctx.fillStyle = '#00ffff';
+    // Visor (Glowing Electric Blue)
+    ctx.fillStyle = '#00d2ff';
     ctx.fillRect(pX + 16, pY + 5, 7, 4);
 
-    // Red Scarf / Cape (Moving with animation)
-    ctx.fillStyle = '#ff3366';
+    // Red/Gold Cape (Moving dynamically)
+    ctx.fillStyle = '#ff0055';
     const scarfOffset = Math.sin(animFrame * 0.3) * 3;
-    ctx.fillRect(pX + 2, pY + 10 + scarfOffset, 8, 5);
+    ctx.fillRect(pX + 2, pY + 10 + scarfOffset, 8, 6);
 
-    // Legs / Boots (Dark Blue & Orange boots)
-    ctx.fillStyle = '#1a1f3c';
+    // Legs / Boots
+    ctx.fillStyle = '#111827';
     if (state === 'RUN') {
       const legOffset = Math.sin(animFrame * 0.4) * 5;
       ctx.fillRect(pX + 8, pY + 24, 6, 8 + legOffset);
       ctx.fillRect(pX + 18, pY + 24, 6, 8 - legOffset);
-      // Boots
       ctx.fillStyle = '#ff9900';
       ctx.fillRect(pX + 6, pY + 30 + legOffset, 8, 4);
       ctx.fillRect(pX + 18, pY + 30 - legOffset, 8, 4);
@@ -63,13 +72,13 @@ export class PixelArtAssets {
 
     // Hands / Energy Gloves
     ctx.fillStyle = '#00ffff';
-    if (state === 'ATTACK') {
-      ctx.fillRect(pX + 22, pY + 12, 10, 6); // Arm blasting forward
+    if (state === 'ATTACK' || state === 'SUPER_ATTACK') {
+      ctx.fillRect(pX + 22, pY + 10, 12, 8); // Arm blasting forward
     } else {
       ctx.fillRect(pX + 10, pY + 16, 6, 6);
     }
 
-    // Shield Aura if active
+    // Shield Aura
     if (shieldActive) {
       ctx.strokeStyle = '#00ffff';
       ctx.lineWidth = 3;
@@ -86,7 +95,7 @@ export class PixelArtAssets {
   // Render Slime Enemy
   public static drawSlime(ctx: CanvasRenderingContext2D, x: number, y: number, width: number, height: number, animFrame: number) {
     const squish = Math.sin(animFrame * 0.2) * 3;
-    ctx.fillStyle = '#39ff14'; // Electric Green Slime
+    ctx.fillStyle = '#39ff14';
     ctx.beginPath();
     ctx.ellipse(x + width / 2, y + height / 2 + squish / 2, width / 2, height / 2 - squish / 2, 0, 0, Math.PI * 2);
     ctx.fill();
@@ -103,13 +112,11 @@ export class PixelArtAssets {
   // Render Flying Bat Enemy
   public static drawFlyingBat(ctx: CanvasRenderingContext2D, x: number, y: number, width: number, height: number, animFrame: number) {
     const wingFlap = Math.sin(animFrame * 0.4) * 8;
-    ctx.fillStyle = '#8a2be2'; // Purple Bat
-    // Body
+    ctx.fillStyle = '#a855f7';
     ctx.beginPath();
     ctx.arc(x + width / 2, y + height / 2, width / 4, 0, Math.PI * 2);
     ctx.fill();
 
-    // Wings
     ctx.beginPath();
     ctx.moveTo(x + width / 2, y + height / 2);
     ctx.lineTo(x - 4, y + height / 2 - wingFlap);
@@ -122,7 +129,6 @@ export class PixelArtAssets {
     ctx.lineTo(x + (width * 3) / 4, y + height / 2 + 4);
     ctx.fill();
 
-    // Glowing Red Eyes
     ctx.fillStyle = '#ff0055';
     ctx.fillRect(x + width / 2 - 5, y + height / 2 - 3, 3, 3);
     ctx.fillRect(x + width / 2 + 2, y + height / 2 - 3, 3, 3);
@@ -130,13 +136,12 @@ export class PixelArtAssets {
 
   // Render Rock Monster Enemy
   public static drawRockMonster(ctx: CanvasRenderingContext2D, x: number, y: number, width: number, height: number) {
-    ctx.fillStyle = '#5a6577';
+    ctx.fillStyle = '#64748b';
     ctx.fillRect(x, y, width, height);
-    // Cracks / Details
-    ctx.fillStyle = '#3a4250';
+    ctx.fillStyle = '#334155';
     ctx.fillRect(x + 4, y + 4, 12, 10);
     ctx.fillRect(x + 20, y + 18, 14, 14);
-    ctx.fillStyle = '#ffaa00'; // Glowing yellow eyes
+    ctx.fillStyle = '#fbbf24';
     ctx.fillRect(x + 8, y + 10, 8, 4);
     ctx.fillRect(x + 24, y + 10, 8, 4);
   }
@@ -149,13 +154,11 @@ export class PixelArtAssets {
     ctx.arc(x + width / 2, y + height / 2 + 4, width / 2 - 2, 0, Math.PI * 2);
     ctx.fill();
 
-    // Inner Flame
     ctx.fillStyle = '#ffcc00';
     ctx.beginPath();
     ctx.arc(x + width / 2, y + height / 2 - flameHeight, width / 3, 0, Math.PI * 2);
     ctx.fill();
 
-    // Eyes
     ctx.fillStyle = '#000000';
     ctx.fillRect(x + 10, y + 12, 4, 6);
     ctx.fillRect(x + 20, y + 12, 4, 6);
@@ -174,18 +177,16 @@ export class PixelArtAssets {
     ctx.save();
     ctx.translate(x + width / 2, y + height / 2);
 
-    // Color based on Phase
-    let primaryColor = '#800000'; // Dark Crimson
+    let primaryColor = '#800000';
     let auraColor = 'rgba(255, 0, 0, 0.3)';
     if (phase === 2) {
       primaryColor = '#990000';
       auraColor = 'rgba(255, 69, 0, 0.5)';
     } else if (phase === 3) {
-      primaryColor = '#cc0000'; // Enraged Red
+      primaryColor = '#cc0000';
       auraColor = 'rgba(255, 215, 0, 0.7)';
     }
 
-    // Aura
     ctx.fillStyle = auraColor;
     ctx.beginPath();
     ctx.arc(0, 0, width * 0.7 + Math.sin(animFrame * 0.2) * 5, 0, Math.PI * 2);
@@ -194,16 +195,13 @@ export class PixelArtAssets {
     const dX = -width / 2;
     const dY = -height / 2;
 
-    // Body
     ctx.fillStyle = primaryColor;
     ctx.fillRect(dX + 10, dY + 20, width - 20, height - 30);
 
-    // Horns / Crown
     ctx.fillStyle = '#ffcc00';
     ctx.fillRect(dX + 8, dY + 2, 8, 18);
     ctx.fillRect(dX + width - 16, dY + 2, 8, 18);
 
-    // Wings
     const wingFlap = Math.sin(animFrame * 0.2) * 10;
     ctx.fillStyle = '#4a0000';
     ctx.beginPath();
@@ -218,12 +216,10 @@ export class PixelArtAssets {
     ctx.lineTo(dX + width - 10, dY + 60);
     ctx.fill();
 
-    // Eyes (Glowing Red / Yellow)
     ctx.fillStyle = phase === 3 ? '#ffff00' : '#ff0000';
     ctx.fillRect(dX + 18, dY + 25, 12, 8);
     ctx.fillRect(dX + width - 30, dY + 25, 12, 8);
 
-    // Sharp Teeth Mouth
     ctx.fillStyle = '#ffffff';
     ctx.fillRect(dX + 20, dY + 45, width - 40, 8);
     ctx.fillStyle = '#000000';
@@ -234,7 +230,7 @@ export class PixelArtAssets {
     ctx.restore();
   }
 
-  // Render Coins (Normal, Golden, Crystal)
+  // Render Coins
   public static drawCoin(ctx: CanvasRenderingContext2D, x: number, y: number, width: number, height: number, type: string, animFrame: number) {
     ctx.save();
     const spin = Math.sin(animFrame * 0.2);
@@ -311,6 +307,9 @@ export class PixelArtAssets {
     } else if (type === 'HEALTH') {
       bgColor = '#ff3366';
       icon = '❤️';
+    } else if (type === 'MAGNET') {
+      bgColor = '#a855f7';
+      icon = '🧲';
     }
 
     ctx.fillStyle = bgColor;
@@ -327,11 +326,9 @@ export class PixelArtAssets {
 
   // Render Checkpoint Flag
   public static drawCheckpoint(ctx: CanvasRenderingContext2D, x: number, y: number, width: number, height: number, activated: boolean) {
-    // Pole
     ctx.fillStyle = '#888888';
     ctx.fillRect(x + 4, y, 6, height);
 
-    // Flag
     ctx.fillStyle = activated ? '#00ff66' : '#ff0055';
     ctx.beginPath();
     ctx.moveTo(x + 10, y + 4);
