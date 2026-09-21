@@ -111,6 +111,9 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
     if (currentLevelId === 2 && newUnlockedWorld < 3) newUnlockedWorld = 3;
     if (currentLevelId === 3 && newUnlockedWorld < 4) newUnlockedWorld = 4;
     if (currentLevelId === 4 && newUnlockedWorld < 5) newUnlockedWorld = 5;
+    if (currentLevelId === 5 && newUnlockedWorld < 6) newUnlockedWorld = 6;
+    if (currentLevelId === 6 && newUnlockedWorld < 7) newUnlockedWorld = 7;
+    if (currentLevelId === 7 && newUnlockedWorld < 8) newUnlockedWorld = 8;
 
     const updatedSave: GameSaveData = {
       ...saveData,
@@ -132,7 +135,7 @@ export const useGameStore = create<GameStoreState>((set, get) => ({
         timeBonus,
         totalScore,
       },
-      gameState: currentLevelId === 5 ? GameState.VICTORY : GameState.LEVEL_COMPLETE,
+      gameState: currentLevelId === 8 ? GameState.VICTORY : GameState.LEVEL_COMPLETE,
     });
   },
 
