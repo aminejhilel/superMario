@@ -174,6 +174,9 @@ ISC © [Amine Jhilel](https://github.com/aminejhilel)
 
 ---
 
+<img width="1917" height="893" alt="image" src="https://github.com/user-attachments/assets/f65890db-94d4-4a41-8bf3-539eeaaff5c3" />
+
+
 <div align="center">
   <strong>CREATED BY AMINE JHILEL • CANVAS 2D ENGINE • PIXEL QUEST EDITION</strong>
 </div>
