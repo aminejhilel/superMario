@@ -172,7 +172,7 @@ Progress is automatically saved to `localStorage` after each completed level:
 
 ISC © [Amine Jhilel](https://github.com/aminejhilel)
 
----
+-----
 *****************************************************************************************************************************************
 <img width="1917" height="893" alt="image" src="https://github.com/user-attachments/assets/f65890db-94d4-4a41-8bf3-539eeaaff5c3" />
 *****************************************************************************************************************************************
