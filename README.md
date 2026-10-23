@@ -29,7 +29,7 @@
 
 ### Desktop
 | Key | Action |
-|-----|--------|
+|-----|---------|
 | `A` / `D` / `←` `→` | Move left / right |
 | `W` / `Space` / `↑` | Jump (double jump supported) |
 | `Shift` | Sprint |
