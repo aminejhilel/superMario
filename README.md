@@ -73,7 +73,7 @@ Use the on-screen virtual D-pad and action buttons (auto-detected).
 ## 👾 Enemies
 
 | Enemy | Behavior |
-|-------|----------|
+|--------|----------|
 | **Slime** | Ground patrol |
 | **Flying Bat** | Aerial patrol |
 | **Rock Monster** | Heavy ground patrol with wider range |
