@@ -8,7 +8,7 @@
 ![Zustand](https://img.shields.io/badge/Zustand-5.x-orange?style=for-the-badge)
 ![TailwindCSS](https://img.shields.io/badge/TailwindCSS-4.x-38bdf8?style=for-the-badge&logo=tailwindcss)
 
--------------
+---------------
 
 ## ✨ Features
 
